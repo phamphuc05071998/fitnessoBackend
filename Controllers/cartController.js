@@ -21,10 +21,8 @@ exports.getAllCart = handlerFactory.getAll(Cart);
 exports.addItemToCart = async (req, res) => {
   const userId = req.user._id;
   const { courseId } = req.body;
-  console.log(userId, courseId);
   try {
     const gymCourse = await GymCourse.findById(courseId);
-    console.log(gymCourse);
     if (!gymCourse) {
       return res.status(404).json({ message: "GymCourse not found" });
     }
@@ -45,7 +43,6 @@ exports.addItemToCart = async (req, res) => {
     }
     cart.items.push(gymCourse._id);
     cart.totalPrice += gymCourse.price;
-    console.log(cart);
     cart.createdAt = Date.now();
     await cart.save();
     res.json(cart);
@@ -102,7 +99,6 @@ exports.addToCart = async (req, res, next) => {
       });
     }
   } catch (err) {
-    console.log(err);
     res.status(400).json({
       message: "Something Went Wrong",
       err: err,
@@ -128,7 +124,6 @@ exports.removeCartItem = async (req, res) => {
     }
     const gymCourseId = cartItem.courseId;
     const gymCourse = await GymCourse.findById(gymCourseId);
-    console.log(gymCourse);
     cart.totalPrice -= Math.round(gymCourse.price * 100) / 100;
     cart.items = cart.items.filter((item) => !item.courseId.equals(itemId));
     await cart.save();

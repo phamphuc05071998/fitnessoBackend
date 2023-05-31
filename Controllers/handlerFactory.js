@@ -28,8 +28,6 @@ exports.getOne = (modal) => {
 };
 exports.deleteOne = (modal) => {
   return catchAsync(async (req, res, next) => {
-    console.log(req.params.id);
-    console.log(modal);
     await modal.findOneAndDelete({ _id: req.params.id });
     res.status(204).json({
       message: "success",

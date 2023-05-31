@@ -45,7 +45,7 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!email || !password)
     return next(new AppError("Please provide email and password", 401));
   const user = await User.findOne({ email }).select("+password");
-  console.log(user);
+
   if (!user) return next(new AppError("User not exist", 404));
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -58,7 +58,7 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 exports.isProtect = catchAsync(async (req, res, next) => {
   let token;
-  console.log("hello");
+
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
@@ -67,7 +67,6 @@ exports.isProtect = catchAsync(async (req, res, next) => {
   } else if (req.cookies.jwt) {
     token = req.cookies.jwt;
   }
-  console.log(token);
   if (!token)
     return next(
       new AppError("You are not login please login to get access", 401)
@@ -87,7 +86,6 @@ exports.isProtect = catchAsync(async (req, res, next) => {
       new AppError("Password changed recently, Please login again", 401)
     );
   req.user = user;
-  console.log("hi");
 
   next();
 });

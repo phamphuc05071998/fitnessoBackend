@@ -17,7 +17,6 @@ const upload = multer({
   fileFilter: fileFilter,
 });
 exports.resizeImage = catchAsync(async (req, res, next) => {
-  console.log(req.file);
   if (!req.file) return next();
   req.file.filename = `course-${req.file.originalname}-${Date.now()}.jpeg`;
   await sharp(req.file.buffer)
