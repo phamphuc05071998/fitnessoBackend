@@ -1,13 +1,13 @@
 const catchAsync = require("./../utils/catchAsync");
 const APIFeature = require("./../utils/APIFeature");
-
+const AppError = require("./../utils/AppError");
 exports.getAll = (modal) => {
   return catchAsync(async (req, res, next) => {
     const feature = new APIFeature(modal.find(), req.query);
     feature.exclude().sort().limitFields().pagination();
     const data = await feature.query;
 
-    if (!data) return next("Can not find and doc", 400);
+    if (!data) return next(new AppError("Can not find any doc", 400));
     res.status(200).json({
       status: "success",
       results: data.length,
@@ -18,7 +18,8 @@ exports.getAll = (modal) => {
 exports.getOne = (modal) => {
   return catchAsync(async (req, res, next) => {
     const data = await modal.findById(req.params.id);
-    if (!data) return next("Can not find and doc", 400);
+    if (!data)
+      return next(new AppError("Can not find any doc with that id", 400));
 
     res.status(200).json({
       status: "success",
@@ -37,7 +38,8 @@ exports.deleteOne = (modal) => {
 exports.updateOne = (modal) => {
   return catchAsync(async (req, res, next) => {
     const data = await modal.findByIdAndUpdate(req.params.id, req.body);
-    if (!data) return next("Can not find and doc", 400);
+    if (!data)
+      return next(new AppError("Can not find any doc with that id", 400));
 
     res.status(200).json({
       status: "success",

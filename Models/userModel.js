@@ -19,23 +19,23 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
+    required: true,
+    validate: {
+      validator: function (v) {
+        return v.length >= 6;
+      },
+      message: () => "User password must have at least 6 characters",
+    },
+    select: false,
+  },
+  passwordConfirm: {
+    type: String,
     required: [true, "User password Confirm required"],
     validate: {
       validator: function (v) {
         return this.password === v;
       },
       message: () => "Repeat password not match the password",
-    },
-    select: false,
-  },
-  passwordConfirm: {
-    type: String,
-    required: true,
-    validate: {
-      validator: function (v) {
-        return v.length >= 6;
-      },
-      message: () => "User password must have atleast 6 characters",
     },
     select: false,
   },
